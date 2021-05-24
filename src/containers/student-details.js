@@ -1,61 +1,83 @@
-import { useEffect } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { getStudentDetails, clearStudentDetails, deleteStudent } from '../actions'
-const StudentDetails = ({ getStudentDetails, deleteStudent, clearStudentDetails, details, match, history }) => {
-    const id = match.params.id
-    useEffect(() => {
-        getStudentDetails(id)
+import { useEffect } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+  getStudentDetails,
+  clearStudentDetails,
+  deleteStudent,
+} from "../actions";
+const StudentDetails = ({
+  getStudentDetails,
+  deleteStudent,
+  clearStudentDetails,
+  details,
+  match,
+  history,
+}) => {
+  const id = match.params.id;
+  useEffect(() => {
+    getStudentDetails(id);
 
-        return ()=>{
-            clearStudentDetails()
-        }
-    },[])
+    return () => {
+      clearStudentDetails();
+    };
+  }, []);
 
-    const deleteTheStudent = () => {
-        let confirm = window.confirm("Are you sure you want to delete?")
-        if(confirm) {
-            deleteStudent(details.id)
-            history.push(`/`)
-        }
+  const deleteTheStudent = () => {
+    let confirm = window.confirm("Are you sure you want to delete?");
+    if (confirm) {
+      deleteStudent(details.id);
+      history.push(`/`);
     }
+  };
 
-    const renderStudentDetails = (details) => {
-        if (details && details.id) {
-            return (
-                <div>
-                    <h2>
-                        Name: {details.name}
-                    </h2>
-                    <h2>
-                        Age: {details.age}
-                    </h2>
-                    <h2>
-                        Phone: {details.phone}
-                    </h2>
-                    <button type="button" className="btn btn-danger"
-                    onClick={deleteTheStudent}>Delete</button>
-                </div>
-            )
-        }
-        return ''
+  const renderStudentDetails = (details) => {
+    if (details && details.id) {
+      return (
+        <div>
+          <img
+            src={details.img}
+            class="img-fluid rounded-circle"
+            style={{
+              maxWidth: "85px",
+              maxHeight: "85px",
+              width: "85px",
+              height: "85px",
+              objectFit: "cover",
+            }}
+            alt=""
+          />
+          <h2>Name: {details.name}</h2>
+          <h2>Age: {details.age}</h2>
+          <h2>Phone: {details.phone}</h2>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={deleteTheStudent}
+          >
+            Delete
+          </button>
+        </div>
+      );
     }
-    return (<div className="alert alert-light">
-        {renderStudentDetails(details)}
-    </div>)
-
-}
-
+    return "";
+  };
+  return (
+    <div className="alert alert-light">{renderStudentDetails(details)}</div>
+  );
+};
 
 const mapStateToProps = (state) => {
-    return {
-        details: state.students.details
-    }
-}
+  return {
+    details: state.students.details,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ getStudentDetails ,clearStudentDetails, deleteStudent}, dispatch)
-}
+  return bindActionCreators(
+    { getStudentDetails, clearStudentDetails, deleteStudent },
+    dispatch
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(StudentDetails)
-
+export default connect(mapStateToProps, mapDispatchToProps)(StudentDetails);
